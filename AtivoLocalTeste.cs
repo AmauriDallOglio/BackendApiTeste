@@ -7,7 +7,7 @@ namespace BackendApiTeste
     public class AtivoLocalTeste
     {
         [Fact]
-        public void TesteValidaConexao()
+        public void Valida_Conexao_DeveRetornarSucesso()
         {
             try
             {
@@ -28,7 +28,7 @@ namespace BackendApiTeste
         }
 
         [Fact]
-        public void TesteListarTodos()
+        public void Obter_Lista_DeveRetornarSucesso()
         {
             // Arrange
             using var httpClient = new HttpClient();
@@ -48,7 +48,7 @@ namespace BackendApiTeste
 
 
         [Fact]
-        public async Task TesteIncluir()
+        public async Task Executa_Inclui_DeveRetornarSucesso()
         {
             //Guid tenantId = Guid.Parse("A31CF8A0-7B4D-EE11-A89E-F0D41578B814"); //c
             Guid tenantId = Guid.Parse("62643056-F34C-EE11-9829-5CCD5B8BDCFF"); //o
@@ -74,13 +74,15 @@ namespace BackendApiTeste
 
             // Assert
             Assert.NotNull(novo);
+            Assert.True(novo.Sucesso);
+            Assert.NotNull(novo.Modelo.Id);
             Assert.IsType<Resposta>(novo);
 
         }
 
 
         [Fact]
-        public async Task TesteExcluir()
+        public async Task Executa_Excluir_DeveRetornarSucesso()
         {
             //Guid tenantId = Guid.Parse("A31CF8A0-7B4D-EE11-A89E-F0D41578B814"); //c
             Guid tenantId = Guid.Parse("62643056-F34C-EE11-9829-5CCD5B8BDCFF"); //o
@@ -92,7 +94,6 @@ namespace BackendApiTeste
             HttpResponseMessage response = httpClient.GetAsync(apiUrl).Result;
             var content = response.Content.ReadAsStringAsync().Result;
             List<ListarTodos> listagem = JsonConvert.DeserializeObject<List<ListarTodos>>(content);
-
 
             foreach (var item in listagem)
             {
@@ -112,9 +113,6 @@ namespace BackendApiTeste
                 Assert.Equal("OK", responseDelete.ReasonPhrase);
                 Assert.IsType<List<ListarTodos>>(listagem);
             }
-
-
-
         }
     }
 }
